@@ -36,3 +36,30 @@ body {
         transform: translateX(-50%);
     }
 }
+
+/* ---------- Mentors Carousel ---------- */
+.mentors-track {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    width: max-content;
+    will-change: transform;
+
+    animation: mentors-scroll 60s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .mentors-track:hover {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes mentors-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
