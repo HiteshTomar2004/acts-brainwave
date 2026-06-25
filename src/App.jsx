@@ -1,5 +1,5 @@
 
-import About from "./sections/About/About";
+import About from "./sections/about/About";
 
 import SponsorsMentors from "./sections/SponsorsMentors/SponsorsMentors";
 
