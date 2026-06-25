@@ -9,3 +9,30 @@ body {
   background: black;
   overflow-x: hidden;
 }
+
+/* ---------- Sponsors Carousel ---------- */
+
+.carousel-track {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: max-content;
+
+    animation: sponsors-scroll 30s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .carousel-track:hover {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes sponsors-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
