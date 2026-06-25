@@ -1,6 +1,6 @@
 import SectionHeading from "./components/SectionHeading";
 import SponsorsCarousel from "./SponsorsCarousel";
-import MentorsSection from "./MentorsSection";
+import MentorsSection from "./MentorsCarousel";
 
 import sponsorsHeading from "../../assets/images/sponsorsHeading.png";
 import mentorsHeading from "../../assets/images/mentorsJudgesHeading.png";
