@@ -1,156 +1,229 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { PiDotsNineBold } from "react-icons/pi";
-const navLinks = [
-  { name: "HOME", href: "#home" },
-  { name: "ABOUT US", href: "#about" },
-  { name: "PRIZE POOL", href: "#prize" },
-  { name: "CONTACT US", href: "#contact" },
-];
+import{ useState, useLayoutEffect, useRef, useCallback } from "react";
 
-const Navbar = () => {
-  const [active, setActive] = useState("HOME");
+/**
+ * Navbar — esports/gaming style navigation bar
+ *
+ * - Hexagonal "pointed cap" silhouette on the left/right ends via clip-path,
+ *   sized with clamp() so it scales smoothly down to mobile widths.
+ * - The active-link underline is a single absolutely-positioned bar that
+ *   measures the active link's position/width and animates (CSS transition)
+ *   to it on click, instead of being re-mounted per item.
+ * - Mobile: nav links collapse behind a hamburger toggle that opens a
+ *   slide-down panel; the decorative dot-grid icon has been removed
+ *   entirely (desktop and mobile).
+ */
+export default function Navbar() {
+  const links = [
+    { label: "Home", href: "#home" },
+    { label: "About Us", href: "#about" },
+    { label: "Prize Pool", href: "#prize" },
+    { label: "Contact Us", href: "#contact" },
+  ];
+
+  const [active, setActive] = useState("Home");
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const navRef = useRef(null);
+  const linkRefs = useRef([]);
+  const [underline, setUnderline] = useState({ left: 0, width: 0, ready: false });
+
+ 
+  const TIP = "clamp(12px, 4vw, 22px)";
+
+  const measureUnderline = useCallback(() => {
+    const idx = links.findIndex((l) => l.label === active);
+    const el = linkRefs.current[idx];
+    if (el) {
+      setUnderline({ left: el.offsetLeft, width: el.offsetWidth, ready: true });
+    }
+  }, [active]);
+
+  useLayoutEffect(() => {
+    measureUnderline();
+    window.addEventListener("resize", measureUnderline);
+    return () => window.removeEventListener("resize", measureUnderline);
+  }, [measureUnderline]);
+
+  const selectLink = (label) => {
+    setActive(label);
+    setMobileOpen(false);
+  };
+
   return (
-    <nav className="fixed top-5 left-0 w-full z-50 flex flex-col items-center">
-      <div className="relative w-full">
-        {/* Glow line top */}
-        <div
-          className="absolute top-0 left-[5%] right-[5%] h-px pointer-events-none"
-          
-        />
-
-        {/* Main nav bar */}
-        <div
-          className="relative flex items-center max-sm:justify-end justify-center px-[clamp(1rem,4vw,3rem)] h-[70px] max-md:h-[60px] border-b border-[rgba(200,255,0,0.15)] max-md:border-none max-md:rounded-none"
-          
-        >
-          {/* Logo */}
-          {/* <div className="shrink-0 w-[50px] h-[36px] flex items-center justify-center">
-            <svg
-              viewBox="0 0 60 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-full h-full"
-            >
-              <path
-                d="M10 30C10 30 15 10 30 8C35 7.5 40 12 42 15C44 18 48 20 55 18C55 18 50 22 45 25C40 28 30 32 20 30L10 30Z"
-                fill="white"
-              />
-              <path
-                d="M5 25C5 25 12 18 22 16"
-                stroke="white"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>*/}
-
-          {/* Nav links */}
-          <div className="hidden md:flex items-center gap-[clamp(1.5rem,3vw,3rem)]">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`relative text-[0.85rem] font-semibold tracking-[0.12em] uppercase no-underline py-2 transition-colors duration-200 ${
-                  active === link.name
-                    ? "text-[#c8ff00] drop-shadow-[0_0_12px_rgba(200,255,0,0.5)]"
-                    : "text-white/70 hover:text-white"
-                }`}
-                onClick={() => setActive(link.name)}
-              >
-                {link.name}
-                {active === link.name && (
-                  <motion.div
-                    className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-[60%] h-[2px] rounded-full"
-                    style={{
-                      background: "#c8ff00",
-                      boxShadow:
-                        "0 0 8px rgba(200,255,0,0.6), 0 0 20px rgba(200,255,0,0.3)",
-                    }}
-                    layoutId="navIndicator"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            ))}
-          </div>
-
-          {/* Mobile menu button */}
+    <nav className="w-full bg-transparent md:bg-[#050505] py-3 sm:py-4 px-3 sm:px-6">
+      <div className="relative mx-auto w-full max-w-6xl">
+        {/* ---------- Mobile: just the hamburger icon ---------- */}
+        <div className="md:hidden flex justify-end mt-6 mr-4">
           <button
-            className="md:hidden bg-transparent  rounded-md text-[#c8ff00] text-[1.3rem] p-[0.4rem_0.5rem] cursor-pointer hover:bg-[rgba(200,255,0,0.1)] hover:border-[#c8ff00] transition-all duration-200"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="flex flex-col items-end gap-[5px] w-6 shrink-0"
           >
-            <PiDotsNineBold />
+            <span
+              className={`block h-[2px] bg-gray-200 rounded-full transition-all duration-300 ${
+                mobileOpen ? "w-5 rotate-45 translate-y-[7px]" : "w-5"
+              }`}
+            />
+            <span
+              className={`block h-[2px] bg-gray-200 rounded-full transition-all duration-300 ${
+                mobileOpen ? "opacity-0" : "w-3.5 opacity-100"
+              }`}
+            />
+            <span
+              className={`block h-[2px] bg-gray-200 rounded-full transition-all duration-300 ${
+                mobileOpen ? "w-5 -rotate-45 -translate-y-[7px]" : "w-5"
+              }`}
+            />
           </button>
         </div>
 
-        {/* Glow line bottom */}
+        {/* ---------- Desktop: hexagon bar ---------- */}
         <div
-        
-          className={ `bottom-0 left-[5%] right-[5%] h-px pointer-events-none`}
+          className="relative hidden md:block"
           style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, rgba(200,255,0,0.5) 20%, rgba(200,255,0,0.8) 50%, rgba(200,255,0,0.5) 80%, transparent 100%)",
-            boxShadow:
-              "0 0 8px rgba(200,255,0,0.4), 0 0 20px rgba(200,255,0,0.15)",
+            clipPath: `polygon(${TIP} 0%, calc(100% - ${TIP}) 0%, 100% 50%, calc(100% - ${TIP}) 100%, ${TIP} 100%, 0% 50%)`,
           }}
-        />
+        >
+          {/* Outer glow / hairline edge */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(196,255,0,0.18) 100%)",
+            }}
+          />
 
-        {/* Left angled tip */}
-        {/* <div
-          className="absolute top-1/2 -translate-y-1/2 left-0 w-5 h-[60%] pointer-events-none max-md:hidden"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(200,255,0,0.3), transparent)",
-            clipPath: "polygon(100% 0%, 100% 100%, 0% 80%, 0% 20%)",
-          }}
-        />*/}
+          {/* Left tip accent glow */}
+          <div
+            className="absolute top-0 bottom-0 left-0 w-28 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(196,255,0,0.6) 0%, rgba(196,255,0,0) 100%)",
+              filter: "blur(10px)",
+            }}
+          />
+          {/* Right tip accent glow */}
+          <div
+            className="absolute top-0 bottom-0 right-0 w-40 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(270deg, rgba(196,255,0,0.85) 0%, rgba(196,255,0,0) 100%)",
+              filter: "blur(12px)",
+            }}
+          />
 
-        {/* Right angled tip */}
-        {/* <div
-          className="absolute top-1/2 -translate-y-1/2 right-0 w-5 h-[60%] pointer-events-none max-md:hidden"
-          style={{
-            background:
-              "linear-gradient(-135deg, rgba(200,255,0,0.3), transparent)",
-            clipPath: "polygon(0% 0%, 0% 100%, 100% 80%, 100% 20%)",
-          }}
-        />*/}
-      </div>
-
-      {/* Mobile dropdown */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="w-full flex flex-col bg-[rgba(10,10,10,0.98)] border-b border-[rgba(200,255,0,0.2)] p-4 gap-3 md:hidden"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+          {/* Inset border frame, 1.5px smaller all around */}
+          <div
+            className="relative m-[1.5px]"
+            style={{
+              clipPath: `polygon(calc(${TIP} - 1.5px) 0%, calc(100% - ${TIP} + 1.5px) 0%, 100% 50%, calc(100% - ${TIP} + 1.5px) 100%, calc(${TIP} - 1.5px) 100%, 0% 50%)`,
+            }}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`text-[0.9rem] font-semibold tracking-[0.1em] uppercase no-underline py-[0.6rem] border-b border-white/5 transition-colors duration-200 ${
-                  active === link.name
-                    ? "text-[#c8ff00] drop-shadow-[0_0_10px_rgba(200,255,0,0.4)]"
-                    : "text-white/70"
-                }`}
-                onClick={() => {
-                  setActive(link.name);
-                  setMobileOpen(false);
+            {/* Main body fill */}
+            <div className="relative bg-gradient-to-b from-[#181818] via-[#0d0d0d] to-[#050505]">
+              {/* Diagonal sheen highlight */}
+              <div
+                className="pointer-events-none absolute inset-0 opacity-60"
+                style={{
+                  background:
+                    "linear-gradient(115deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.05) 100%)",
+                }}
+              />
+
+              {/* Bottom accent glow line */}
+              <div
+                className="pointer-events-none absolute bottom-0 left-0 right-0 h-[2px]"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(196,255,0,0) 0%, rgba(196,255,0,0.55) 50%, rgba(196,255,0,0) 100%)",
+                }}
+              />
+
+              {/* Content row */}
+              <div
+                className="relative flex items-center justify-center h-14 sm:h-16 md:h-[68px]"
+                style={{
+                  paddingLeft: `calc(${TIP} + 14px)`,
+                  paddingRight: `calc(${TIP} + 14px)`,
                 }}
               >
-                {link.name}
-              </a>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+                {/* Desktop nav links — centered */}
+                <div ref={navRef} className="flex relative">
+                  <ul className="flex items-center gap-10 lg:gap-14">
+                    {links.map((link, i) => {
+                      const isActive = active === link.label;
+                      return (
+                        <li key={link.label}>
+                          <a
+                            ref={(el) => (linkRefs.current[i] = el)}
+                            href={link.href}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              selectLink(link.label);
+                            }}
+                            className={`text-[13px] tracking-wide font-bold uppercase transition-colors duration-200 whitespace-nowrap ${
+                              isActive
+                                ? "text-[#cdf500]"
+                                : "text-gray-200 hover:text-[#cdf500]"
+                            }`}
+                          >
+                            {link.label}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  {/* Sliding underline — animates left/width via CSS transition */}
+                  <span
+                    className="absolute -bottom-[20px] h-[2px] rounded-full transition-all duration-300 ease-out"
+                    style={{
+                      left: underline.left,
+                      width: underline.width,
+                      opacity: underline.ready ? 1 : 0,
+                      background:
+                        "linear-gradient(90deg, rgba(205,245,0,0) 0%, #cdf500 50%, rgba(205,245,0,0) 100%)",
+                      boxShadow: "0 0 8px 1px rgba(205,245,0,0.7)",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ---------- Mobile dropdown panel ---------- */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+            mobileOpen ? "max-h-64 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
+          }`}
+        >
+            <div className="bg-[#0d0d0d] border border-white/10 rounded-xl px-5 py-3 flex flex-col divide-y divide-white/5">
+            {links.map((link) => {
+              const isActive = active === link.label;
+              return (
+                <li key={link.label}>
+                      <a
+                          key={link.label}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      selectLink(link.label);
+                    }}
+                    className={`block py-3 text-[13px] tracking-wide font-bold uppercase transition-colors duration-200 ${
+                      isActive ? "text-[#cdf500]" : "text-gray-200"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
