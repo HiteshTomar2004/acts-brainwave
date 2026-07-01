@@ -9,3 +9,84 @@ body {
   background: black;
   overflow-x: hidden;
 }
+
+/* ---------- Sponsors Carousel ---------- */
+
+.carousel-track {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    width: max-content;
+
+    animation: sponsors-scroll 30s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .carousel-track:hover {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes sponsors-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* ---------- Mentors Carousel ---------- */
+.mentors-track {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    width: max-content;
+    will-change: transform;
+
+    animation: mentors-scroll 60s linear infinite;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .mentors-track:hover {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes mentors-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.mentors-viewport {
+    position: relative;
+    overflow: hidden;
+
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 8%,
+        black 92%,
+        transparent
+    );
+
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 8%,
+        black 92%,
+        transparent
+    );
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
