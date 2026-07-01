@@ -5,6 +5,8 @@ import about2 from "../../assets/images/about2.png";
 import about3 from "../../assets/images/about3.png";
 import about4 from "../../assets/images/about4.png";
 import about5 from "../../assets/images/about5.png";
+import about6 from "../../assets/images/about6.png";
+import about7 from "../../assets/images/about7.png";
 
 import smiley from "../../assets/stickers/smiley.png";
 import cautionTape from "../../assets/stickers/cautionTape2.png";
@@ -75,7 +77,7 @@ export default function About() {
       </div>
 
       {/* Image Collage */}
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-5 md:px-0 mb-12">
+      <div className="max-w-420 mx-auto px-4 sm:px-6 lg:px-8 mb-12">
 
         {/* Mobile Layout */}
         <div className="grid grid-cols-2 gap-3 md:hidden">
@@ -93,7 +95,7 @@ export default function About() {
           </div>
 
           <div className="h-48 rounded-2xl overflow-hidden">
-            <img src="https://picsum.photos/400/600?random=4" className="w-full h-full object-cover" />
+            <img src={about6} className="w-full h-full object-cover" />
           </div>
 
           <div className="col-span-2 h-56 rounded-2xl overflow-hidden">
@@ -101,7 +103,7 @@ export default function About() {
           </div>
 
           <div className="h-36 rounded-2xl overflow-hidden">
-            <img src="https://picsum.photos/400/600?random=5" className="w-full h-full object-cover" />
+            <img src={about7} className="w-full h-full object-cover" />
           </div>
 
           <div className="h-36 rounded-2xl overflow-hidden">
@@ -111,16 +113,16 @@ export default function About() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:flex gap-3">
+        <div className="hidden md:items-stretch md:flex gap-3">
 
           {/* Left Column */}
           <div className="w-1/4 flex flex-col gap-3">
-            <div className="h-72 rounded-2xl overflow-hidden">
+            <div className="h-68 rounded-2xl overflow-hidden">
               <img src={about5} className="w-full h-full object-cover" />
             </div>
 
-            <div className="h-32 rounded-2xl overflow-hidden">
-              <img src="https://picsum.photos/400/600?random=5" className="w-full h-full object-cover" />
+            <div className="h-36 rounded-2xl overflow-hidden">
+              <img src={about6} className="w-full h-full object-cover" />
             </div>
           </div>
 
@@ -137,16 +139,16 @@ export default function About() {
               </div>
 
               <div className="flex-1 h-52 rounded-2xl overflow-hidden">
-                <img src="https://picsum.photos/400/600?random=3" className="w-full h-full object-cover" />
+                <img src={about7}className="w-full h-full object-cover" />
               </div>
             </div>
 
             <div className="flex gap-3">
-              <div className="flex-1 h-48 rounded-2xl overflow-hidden">
+              <div className="flex-1 h-52 rounded-2xl overflow-hidden">
                 <img src={about1} className="w-full h-full object-cover" />
               </div>
 
-              <div className="w-1/4 h-48 rounded-2xl overflow-hidden">
+              <div className="w-1/4 h-52 rounded-2xl overflow-hidden">
                 <img src={about3} className="w-full h-full object-cover" />
               </div>
             </div>
@@ -158,8 +160,19 @@ export default function About() {
       </div>
 
       {/* Description */}
-      <div className="max-w-6xl xl:max-w-7xl mx-auto px-2 sm:px-0">
-        <p className="text-left text-zinc-300 text-base md:text-lg leading-relaxed ">
+      <div className="max-w-420 mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="
+            font-exo
+            font-semibold
+
+            text-lg
+            md:text-xl
+            lg:text-2xl
+
+            leading-relaxed
+
+            text-zinc-200
+        ">
           Brainwave is the premier annual technical festival of Guru Gobind
           Singh Indraprastha University (East Delhi Campus), proudly hosted by
           ACTS (Advanced Coding & Technology Society), the campus's flagship
