@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 html {
@@ -89,4 +90,9 @@ body {
 
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
+}
+
+/* ---------- About Page font ---------- */
+.font-exo {
+    font-family: "Exo", sans-serif;
 }
