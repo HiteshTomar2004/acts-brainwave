@@ -18,8 +18,12 @@ export default function SponsorsMentors() {
                 bg-black
                 text-white
                 overflow-hidden
-                py-20
-                md:py-28
+                pt-16
+                pb-16
+                md:pt-32
+                md:pr-16
+                md:pl-16
+                md:pb-32
             "
         >
 
@@ -33,8 +37,9 @@ export default function SponsorsMentors() {
                     inset-0
                     w-full
                     h-full
-
+                    -top-4
                     object-cover
+                    object-[center_20%]
 
                     opacity-70
 
@@ -52,16 +57,16 @@ export default function SponsorsMentors() {
                 className="
                     absolute
 
-                    top-4
+                    -top-4
                     left-2
 
                     w-28
 
                     md:w-36
-                    lg:w-44
+                    lg:w-52
 
-                    md:top-6
-                    lg:top-8
+                    md:-top-4
+                    lg:-top-4
 
                     md:left-4
                     lg:left-6
@@ -96,7 +101,7 @@ export default function SponsorsMentors() {
 
             {/* ---------------- Main Content ---------------- */}
 
-            <div className="relative z-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative z-20 max-w-420 mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Sponsors */}
 
@@ -104,7 +109,7 @@ export default function SponsorsMentors() {
                     image={sponsorsHeading}
                     alt="Sponsors"
                     className="mb-10"
-                    imageClassName="max-w-[300px] md:max-w-xl"
+                    imageClassName="max-w-[300px] md:max-w-3xl"
                 />
 
                 <SponsorsCarousel />
@@ -115,7 +120,7 @@ export default function SponsorsMentors() {
                     image={mentorsHeading}
                     alt="Mentors & Judges"
                     className="mt-20 mb-10"
-                    imageClassName="max-w-[360px] md:max-w-2xl"
+                    imageClassName="max-w-[360px] md:max-w-5xl"
                 />
 
                 <MentorsSection />
