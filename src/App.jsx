@@ -9,7 +9,6 @@ import SponsorsMentors from "./sections/SponsorsMentors/SponsorsMentors";
 import FAQ from "./sections/FAQ/FAQ";
 import FooterSection from "./sections/FooterSection/FooterSection";
 
-
 function App() {
   return (
     <>
